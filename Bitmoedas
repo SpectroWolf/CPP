@@ -1,0 +1,46 @@
+/* Bitmoedas
+
+    Será dado um valor para o programa contar todas as possibilidades de conversão em bitmoedas, sendo que as bitmoedas são valores fixos
+   sendo eles: "50,25,10,5,1", totalizando 5 possíveis bitmoedas. Com base nisso o programa irá testar todas as combinações possíveis para
+   converter o valor.
+
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int possibilidades(int moedas[], int m, int valor) { //m representa quantas bitmoedas temos disponíveis, valor é o número que será convertido
+    unsigned int memo[valor + 1][m]; //cria um memo para salvar as respostas já encontradas
+
+    for (int i = 0; i < m; i++) memo[0][i] = 1;
+    for (int x = 1; x < valor + 1; x++) {
+        for (int moeda_i = 0; moeda_i < m; moeda_i++) {
+            int com_i = 0; //contar incluindo moeda i
+            if (x - moedas[moeda_i] >= 0)
+                com_i = memo[x - moedas[moeda_i]][moeda_i];
+
+            int sem_i = 0; //contar sem moeda i
+
+            if (moeda_i >= 1) sem_i = memo[x][moeda_i - 1];
+
+            memo[x][moeda_i] = com_i + sem_i;
+
+        }
+    }
+    return memo[valor][m - 1];
+}
+
+int main() {
+
+    int moedas[5] = { 50,25,10,5,1 };
+    int valor = 0; //número para realizar a conversão
+
+    while (scanf("%d", &valor) != EOF) { //condição de parada para correções automáticas enviadas por arquivo.
+
+        cout << possibilidades(moedas, 5, valor) << endl;
+
+    }
+
+    return 0;
+}
